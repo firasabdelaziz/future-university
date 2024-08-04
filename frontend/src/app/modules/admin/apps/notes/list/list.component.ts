@@ -84,8 +84,8 @@ export class NotesListComponent implements OnInit, OnDestroy
                 console.log("notes",notes);
                 
                 if ( !notes || !notes.length )
-                {
-                    return;
+                {                    
+                    return notes;
                 }
 
                 // Store the filtered notes

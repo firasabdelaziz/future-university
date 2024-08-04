@@ -84,13 +84,7 @@ export const appRoutes: Route[] = [
             {path: 'apps', children: [
                 {path: 'notes', loadChildren: () => import('app/modules/admin/apps/notes/notes.routes')},
                 {path: 'tasks', loadChildren: () => import('app/modules/admin/apps/tasks/tasks.routes')},
-            ]},
-
-            // Pages
-            
-
-            // User Interface
-           
+            ]},           
 
             // 404 & Catch all
             {path: '404-not-found', pathMatch: 'full', loadChildren: () => import('app/modules/admin/pages/error/error-404/error-404.routes')},

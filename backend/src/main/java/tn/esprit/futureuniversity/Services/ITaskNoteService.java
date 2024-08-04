@@ -1,7 +1,7 @@
 package tn.esprit.futureuniversity.Services;
 
+import tn.esprit.futureuniversity.Entities.Course;
 import tn.esprit.futureuniversity.Entities.Note;
-import tn.esprit.futureuniversity.Entities.Section;
 import tn.esprit.futureuniversity.Entities.Task;
 
 import java.util.List;
@@ -15,18 +15,21 @@ public interface ITaskNoteService {
     void deleteNoteById(long id);
 
 
-    List<Section> getSectionsByUser(long userId);
-    Section createSection(Section section);
-    Section getSectionById(long id);
-    Section updateSectionById(long id, Section section);
-    void deleteSectionById(long id);
+    List<Task> getTasksByUser(long userId);
 
+    List<Task> getTasksByCourse(long courseId);
 
-    List<Task> getTasksByUser(long sectionId);
     Task createTask(Task task);
     Task getTaskById(long id);
-
     Task updateTaskById(long id,Task task);
     void deleteTaskById(long id);
+
+    // New methods for managing courses
+    List<Course> getCourses();
+    List<Course> getCoursesByUser(long userId); // For courses of professor
+    Course createCourse(Course course);
+    Course getCourseById(long id);
+    Course updateCourseById(long id, Course course);
+    void deleteCourseById(long id);
 
 }

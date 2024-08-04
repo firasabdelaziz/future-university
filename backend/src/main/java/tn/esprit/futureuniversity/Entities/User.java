@@ -4,6 +4,7 @@ package tn.esprit.futureuniversity.Entities;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.mapping.Set;
 import tn.esprit.futureuniversity.Enums.Role;
 
 import java.time.LocalDateTime;
@@ -49,5 +50,6 @@ public class User {
     private String verificationToken; // Add verification token field
     @Column(name = "verified")
     private boolean verified; // Add verified field
+
 
 }

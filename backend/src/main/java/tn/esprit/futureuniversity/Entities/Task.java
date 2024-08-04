@@ -55,4 +55,8 @@ public class Task implements Serializable {
     @Column(name = "tag")
     private List<String> tags;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id", nullable = false) // Foreign key to Course entity
+    private Course course;
+
 }

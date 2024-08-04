@@ -4,10 +4,10 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import tn.esprit.futureuniversity.Entities.Course;
 import tn.esprit.futureuniversity.Entities.Note;
-import tn.esprit.futureuniversity.Entities.Section;
 import tn.esprit.futureuniversity.Entities.Task;
-import tn.esprit.futureuniversity.Security.ExportService;
+import tn.esprit.futureuniversity.Services.ExportService;
 import tn.esprit.futureuniversity.Services.ITaskNoteService;
 
 import lombok.AllArgsConstructor;
@@ -79,33 +79,6 @@ public class TaskNoteController {
 
 
 
-    // Section endpoints
-    @PostMapping("/sections")
-    public Section createSection(@RequestBody Section section) {
-        return taskNoteService.createSection(section);
-    }
-
-    @GetMapping("/sections/{id}")
-    public Section getSectionById(@PathVariable long id) {
-        return taskNoteService.getSectionById(id);
-    }
-
-    @PutMapping("/sections/{id}")
-    public Section updateSectionById(@PathVariable long id, @RequestBody Section section) {
-        return taskNoteService.updateSectionById(id, section);
-    }
-
-    @DeleteMapping("/sections/{id}")
-    public void deleteSectionById(@PathVariable long id) {
-        taskNoteService.deleteSectionById(id);
-    }
-
-    @GetMapping("/sections/user/{userId}")
-    public List<Section> getSectionsByUser(@PathVariable long userId) {
-        return taskNoteService.getSectionsByUser(userId);
-    }
-
-
     // Task endpoints
     @PostMapping("/tasks")
     public Task createTask(@RequestBody Task task) {
@@ -127,10 +100,41 @@ public class TaskNoteController {
         return taskNoteService.updateTaskById(id, task);
     }
 
+    @GetMapping("/tasks/course/{courseId}")
+    public List<Task> getTasksByCourse(@PathVariable long courseId) {
+        return taskNoteService.getTasksByCourse(courseId);
+    }
     @GetMapping("/tasks/user/{userId}")
     public List<Task> getTasksByUser(@PathVariable long userId) {
         return taskNoteService.getTasksByUser(userId);
     }
 
+    // Course endpoints
+    @PostMapping("/courses")
+    public Course createCourse(@RequestBody Course course) {
+        return taskNoteService.createCourse(course);
+    }
+
+    @GetMapping("/courses/{id}")
+    public Course getCourseById(@PathVariable long id) {
+        return taskNoteService.getCourseById(id);
+    }
+
+    @PutMapping("/courses/{id}")
+    public Course updateCourseById(@PathVariable long id, @RequestBody Course course) {
+        return taskNoteService.updateCourseById(id, course);
+    }
+
+    @DeleteMapping("/courses/{id}")
+    public void deleteCourseById(@PathVariable long id) {
+        taskNoteService.deleteCourseById(id);
+    }
+
+
+
+    @GetMapping("/courses")
+    public List<Course> getCourses() {
+        return taskNoteService.getCourses();
+    }
 
 }
