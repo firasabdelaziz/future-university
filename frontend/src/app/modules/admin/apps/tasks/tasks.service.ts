@@ -271,7 +271,8 @@ export class TasksService {
   updateTask(task: any): Observable<any> {
     // Clone the task to prevent accidental reference based updates
     const updatedNote = cloneDeep(task) as any;
-
+    console.log("task",task);
+    
     return this._httpClient
       .put(this._baseUrl + "/Tasknote/tasks/" + task.id, updatedNote, {
         headers: this.headers,

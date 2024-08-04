@@ -25,6 +25,8 @@ public class TaskNoteService implements ITaskNoteService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
+    private final TaskNotificationService notificationService;
+
 
 
     public List<Note> getNotesByUser(long userId) {
@@ -76,7 +78,9 @@ public class TaskNoteService implements ITaskNoteService {
 
     @Override
     public Task createTask(Task task) {
-        return taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+        notificationService.scheduleNotification(savedTask);
+        return savedTask;
     }
 
     @Override
@@ -100,10 +104,11 @@ public class TaskNoteService implements ITaskNoteService {
             task.setUpdatedAt(updatedTask.getUpdatedAt());
             task.setTags(updatedTask.getTags());
             task.setCourse(updatedTask.getCourse()); // Update course relation
-
-
             System.out.println("Updated task: " + task);
-            return taskRepository.save(task);
+            Task updatedTasksave = taskRepository.save(task);
+            notificationService.scheduleNotification(updatedTask);
+            return updatedTasksave;
+
         } else {
             System.out.println("Task not found with ID: " + id);
             throw new RuntimeException("Task not found");

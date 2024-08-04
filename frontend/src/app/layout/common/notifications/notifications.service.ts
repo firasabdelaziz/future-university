@@ -1,31 +1,62 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
-import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
+//import * as Stomp from 'stompjs';
+//import * as SockJS from 'sockjs-client';
 
 @Injectable({providedIn: 'root'})
 export class NotificationsService
 {
-    private _notifications: ReplaySubject<Notification[]> = new ReplaySubject<Notification[]>(1);
+    private notificationsSubject = new BehaviorSubject<Notification[]>([]);
+   // private stompClient: Stomp.Client;
+    private baseUrl = 'http://localhost:8888/api'; // Your backend base URL
+
 
     /**
      * Constructor
      */
     constructor(private _httpClient: HttpClient)
     {
+       // this.initializeWebSocketConnection();
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
+/*
+    private initializeWebSocketConnection() {
+        const socket = new SockJS(`${this.baseUrl}/ws`);
+        this.stompClient = Stomp.over(socket);
+        this.stompClient.connect({}, (frame) => {
+            console.log('Connected: ' + frame);
+            
+            this.stompClient.subscribe('/topic/public', (message) => {
+              if (message.body) {
+                const notification: Notification = JSON.parse(message.body);
+                this.handleNewNotification(notification);    
+              }
+            });
+          }, (error) => {
+            console.error('WebSocket connection error:', error);
+          });
+      
+      }
+    
 
     /**
      * Getter for notifications
      */
     get notifications$(): Observable<Notification[]>
     {
-        return this._notifications.asObservable();
+        return this.notificationsSubject.asObservable();
     }
+
+    private handleNewNotification(notification: Notification) {
+        const currentNotifications = this.notificationsSubject.value;
+        this.notificationsSubject.next([notification, ...currentNotifications]);
+      }
+    
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -39,7 +70,7 @@ export class NotificationsService
         return this._httpClient.get<Notification[]>('api/common/notifications').pipe(
             tap((notifications) =>
             {
-                this._notifications.next(notifications);
+                this.notificationsSubject.next(notifications);
             }),
         );
     }
@@ -57,7 +88,7 @@ export class NotificationsService
                 map((newNotification) =>
                 {
                     // Update the notifications with the new notification
-                    this._notifications.next([...notifications, newNotification]);
+                    this.notificationsSubject.next([...notifications, newNotification]);
 
                     // Return the new notification from observable
                     return newNotification;
@@ -89,7 +120,7 @@ export class NotificationsService
                     notifications[index] = updatedNotification;
 
                     // Update the notifications
-                    this._notifications.next(notifications);
+                    this.notificationsSubject.next(notifications);
 
                     // Return the updated notification
                     return updatedNotification;
@@ -117,7 +148,7 @@ export class NotificationsService
                     notifications.splice(index, 1);
 
                     // Update the notifications
-                    this._notifications.next(notifications);
+                    this.notificationsSubject.next(notifications);
 
                     // Return the deleted status
                     return isDeleted;
@@ -143,7 +174,7 @@ export class NotificationsService
                     });
 
                     // Update the notifications
-                    this._notifications.next(notifications);
+                    this.notificationsSubject.next(notifications);
 
                     // Return the updated status
                     return isUpdated;

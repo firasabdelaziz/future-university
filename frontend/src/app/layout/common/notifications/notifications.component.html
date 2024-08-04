@@ -49,7 +49,7 @@
             <ng-container *ngFor="let notification of notifications; trackBy: trackByFn">
                 <div
                     class="flex group hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5"
-                    [ngClass]="{'unread': !notification.read}">
+                    [ngClass]="{'unread': !notification.read, 'new-notification': notification.isNew}">
 
                     <!-- Notification with a link -->
                     <ng-container *ngIf="notification.link">

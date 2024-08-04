@@ -125,6 +125,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       tags: [[]],
       updatedAt: [null],
       createdAt: [null],
+      course:{}
     });
 
     // Get the tasks

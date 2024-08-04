@@ -32,7 +32,7 @@ export class ProjectComponent implements OnInit, OnDestroy
     data: any;
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    username : any = localStorage.getItem('username');
     /**
      * Constructor
      */

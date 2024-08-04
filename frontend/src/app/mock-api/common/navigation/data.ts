@@ -4,29 +4,18 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id      : 'dashboards',
-        title   : 'Dashboards',
-        subtitle: 'Unique dashboard designs',
+        title   : localStorage.getItem('role') === 'PROFESSOR' ? 'Dashboards Professor' :  'Dashboards Student',
+        subtitle: localStorage.getItem('role') === 'PROFESSOR' ? 'Professor Space' : 'Student Space',
         type    : 'group',
         icon    : 'heroicons_outline:home',
-        children: [
+        children:   localStorage.getItem('role') !== 'PROFESSOR' ?        [
             {
-                id   : 'dashboards.project',
-                title: 'Project',
+                id   : 'dashboards.home',
+                title: 'home',
                 type : 'basic',
                 icon : 'heroicons_outline:clipboard-document-check',
                 link : '/dashboards/project',
             },
-          
-        ],
-    },
-    {
-        id      : 'apps',
-        title   : 'Applications',
-        subtitle: 'Custom made application designs',
-        type    : 'group',
-        icon    : 'heroicons_outline:home',
-        children: [
-    
             {
                 id   : 'apps.notes',
                 title: 'Notes',
@@ -41,6 +30,22 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:check-circle',
                 link : '/apps/tasks',
+            },
+          
+        ] : [
+            {
+                id   : 'dashboards.home',
+                title: 'home',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-document-check',
+                link : '/dashboards/project',
+            },
+            {
+                id   : 'apps.course',
+                title: 'Course',
+                type : 'basic',
+                icon : 'heroicons_outline:academic-cap',
+                link : '/apps/courses',
             },
         ],
     },
