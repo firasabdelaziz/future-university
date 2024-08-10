@@ -36,7 +36,9 @@ export class CourseService {
         return this._httpClient.get<Course>(`http://localhost:8888/api/Tasknote/courses/${id}`).pipe(
             tap((course) => {
                 this._course.next(course);
+
             })
+
         );
     }
 
