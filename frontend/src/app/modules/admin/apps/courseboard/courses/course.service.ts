@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class CourseService {
-    private _courses: BehaviorSubject<Course[] | null> = new BehaviorSubject(null);
-    private _course: BehaviorSubject<Course | null> = new BehaviorSubject(null);
+    private _courses: BehaviorSubject<Course[]> = new BehaviorSubject<Course[]>([]);
+    private _course: BehaviorSubject<Course | null> = new BehaviorSubject<Course | null>(null);
     private _pagination: BehaviorSubject<CoursePagination | null> = new BehaviorSubject(null);
 
     constructor(private _httpClient: HttpClient) {}

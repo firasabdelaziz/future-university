@@ -178,8 +178,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this._tasksService.task$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((task: any) => {
-        this.selectedTask = task;
-
+        this.selectedTask = task;        
         // Mark for check
         this._changeDetectorRef.markForCheck();
       });

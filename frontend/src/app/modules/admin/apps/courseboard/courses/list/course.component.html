@@ -31,10 +31,22 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #courseMenu="matMenu">
+                            <button mat-menu-item (click)="openUpdateCourseDialog(course)">Update</button> <!-- Update Button -->
                             <button mat-menu-item (click)="openDeleteConfirmationDialog(course)">Delete</button>
                         </mat-menu>
                     </div>
                     <div class="text-gray-700">{{course.description}}</div>
+                    <div style="
+                        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+                        padding: 8px 12px;
+                        border-radius: 8px;
+                        color: #333;
+                        font-size: 0.875rem;
+                        margin-top: 12px;
+                        display: inline-block;
+                    ">
+                        <span>Created by: Mr {{course.userId.firstName}} {{course.userId.lastName}}</span>
+                    </div>
                 </div>
             </div>
         </div>

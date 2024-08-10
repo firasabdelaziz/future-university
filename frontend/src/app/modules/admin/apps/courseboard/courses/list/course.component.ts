@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { UpdateCourseDialogComponent } from './update-course-dialog.coomponents';
 
 @Component({
     selector     : 'course-list',
@@ -24,6 +26,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CourseListComponent implements OnInit {
     courses: Course[];
+    private _subscriptions: Subscription = new Subscription();
 
     constructor(
         private _courseService: CourseService,
@@ -33,16 +36,13 @@ export class CourseListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this._courseService.getCourses().subscribe((courses) => {
-            console.log("here",courses);
-            
-            this.courses = courses;
-            console.log("this.courses",this.courses);
-
-            this._cdr.detectChanges(); // Force change detection
-
-            
-        });
+        this._subscriptions.add(
+            this._courseService.courses$.subscribe((courses) => {
+                this.courses = courses;
+                this._cdr.detectChanges(); // Ensure changes are detected
+            })
+        );
+        this._courseService.getCourses().subscribe(); // Ensure initial data load
     }
 
     openAddCourseDialog(): void {
@@ -59,6 +59,20 @@ export class CourseListComponent implements OnInit {
             }
         });
     }
+
+    openUpdateCourseDialog(course: Course): void {
+        const dialogRef = this._dialog.open(UpdateCourseDialogComponent, {
+            width: '400px',
+            data: { course } // Pass the course data to the dialog
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this._courseService.updateCourse(result.id, result).subscribe();
+            }
+        });
+    }
+
 
     openDeleteConfirmationDialog(course: Course): void {
         const dialogRef = this._dialog.open(DeleteConfirmationDialogComponent, {

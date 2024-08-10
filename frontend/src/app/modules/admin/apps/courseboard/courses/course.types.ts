@@ -4,6 +4,8 @@ export interface Course {
     description: string;
     userId: {
         id: number;
+        firstName: string,
+        lastName: string,
     };
 }
 

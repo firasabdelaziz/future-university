@@ -14,6 +14,7 @@ import {
 } from "rxjs";
 import { environment } from "../../../../../../environments/environment";
 import { cloneDeep } from "lodash";
+import { Course } from "../courseboard/courses/course.types";
 
 interface taskResponse {
   id: string;
@@ -36,6 +37,7 @@ export class TasksService {
   private _tasks: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   private readonly _baseUrl = environment.apiUrl;
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
+  private _courses: BehaviorSubject<Course[]> = new BehaviorSubject<Course[]>([]);
 
   /**
    * Constructor
@@ -60,6 +62,9 @@ export class TasksService {
     return this._task.asObservable();
   }
 
+  get courses$(): Observable<Course[]> {
+    return this._courses.asObservable();
+}
   /**
    * Getter for tasks
    */
@@ -81,6 +86,15 @@ export class TasksService {
       })
     );
   }
+
+  getCourses(): Observable<Course[]> {
+    return this._httpClient.get<Course[]>('http://localhost:8888/api/Tasknote/courses').pipe(
+        tap((courses) => {
+            console.log("api",courses);                
+            this._courses.next(courses);
+        })
+    );
+}
 
   /**
    * Crate tag
@@ -270,11 +284,13 @@ export class TasksService {
    */
   updateTask(task: any): Observable<any> {
     // Clone the task to prevent accidental reference based updates
-    const updatedNote = cloneDeep(task) as any;
-    console.log("task",task);
+    const updatedTask = cloneDeep(task) as any;
+    console.log("task",updatedTask);
+
+
     
     return this._httpClient
-      .put(this._baseUrl + "/Tasknote/tasks/" + task.id, updatedNote, {
+      .put(this._baseUrl + "/Tasknote/tasks/" + task.id, updatedTask, {
         headers: this.headers,
       })
       .pipe(

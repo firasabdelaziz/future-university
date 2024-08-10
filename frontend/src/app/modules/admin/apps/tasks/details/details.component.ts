@@ -27,7 +27,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDividerModule } from "@angular/material/divider";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatFormField, MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
@@ -46,6 +46,8 @@ import { Tag, Task } from "app/modules/admin/apps/tasks/tasks.types";
 import { assign } from "lodash-es";
 import { DateTime } from "luxon";
 import { debounceTime, filter, Subject, takeUntil, tap } from "rxjs";
+import { Course } from "../../courseboard/courses/course.types";
+import { MatSelectModule } from "@angular/material/select";
 
 @Component({
   selector: "tasks-details",
@@ -72,6 +74,8 @@ import { debounceTime, filter, Subject, takeUntil, tap } from "rxjs";
     MatDatepickerModule,
     FuseFindByKeyPipe,
     DatePipe,
+    MatSelectModule,
+    MatFormFieldModule,
   ],
 })
 export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -83,6 +87,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   tagsEditMode: boolean = false;
   filteredTags: Tag[];
   task: any;
+  courses: Course[] = [];
   taskForm: UntypedFormGroup;
   tasks: any[];
   private _tagsPanelOverlayRef: OverlayRef;
@@ -115,6 +120,12 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     // Open the drawer
     this._tasksListComponent.matDrawer.open();
 
+    this._tasksService.getCourses().subscribe((courses: Course[]) => {
+      this.courses = courses;
+      this._changeDetectorRef.markForCheck();
+  })
+  
+
     // Create the task form
     this.taskForm = this._formBuilder.group({
       id: [""],
@@ -125,7 +136,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       tags: [[]],
       updatedAt: [null],
       createdAt: [null],
-      course:{}
+      course: {},
     });
 
     // Get the tasks
@@ -153,8 +164,11 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         
 
         // Patch values to the form from the task
-        this.taskForm.patchValue(task, { emitEvent: false });
-
+      // Patch values to the form from the task
+      this.taskForm.patchValue({
+        ...task,
+        course:task.course.id
+      },{ emitEvent: false });        
         console.log("this.taskForm",this.taskForm);
 
         // Mark for check
@@ -166,7 +180,6 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         tap((value) => {
           // Update the task object
-
           this.task = value;
           this.taskForm.patchValue(value, { emitEvent: false });
         }),
@@ -174,13 +187,20 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this._unsubscribeAll)
       )
       .subscribe((value) => {
+        const courseNew = this.courses.find(course => course.id === value.course) || null
+
+        const taskUpdate = {
+          ...value,
+          course: courseNew
+        };
+        
         // Update the task on the server
-        this._tasksService.updateTask(value).subscribe();
-        const index = this._tasksListComponent.tasks.findIndex(item => item.id === value.id);
+        this._tasksService.updateTask(taskUpdate).subscribe();
+        const index = this._tasksListComponent.tasks.findIndex(item => item.id === taskUpdate.id);
 
         if (index !== -1) {
             // Update the existing task
-            this._tasksListComponent.tasks[index] = value;
+            this._tasksListComponent.tasks[index] = taskUpdate;
         } else {
             // Handle case where task with given ID doesn't exist
             console.error(`Task with ID ${value.id} not found.`);
