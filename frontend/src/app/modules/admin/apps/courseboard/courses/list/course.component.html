@@ -31,6 +31,13 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #courseMenu="matMenu">
+                            <div class="mt-4">
+                                <button
+                                    mat-menu-item
+                                    [routerLink]="['/apps/course/courseslist', course.id]">
+                                    View Tasks
+                                </button>
+                            </div>
                             <button mat-menu-item (click)="openUpdateCourseDialog(course)">Update</button> <!-- Update Button -->
                             <button mat-menu-item (click)="openDeleteConfirmationDialog(course)">Delete</button>
                         </mat-menu>

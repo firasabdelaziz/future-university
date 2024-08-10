@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { UpdateCourseDialogComponent } from './update-course-dialog.coomponents';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector     : 'course-list',
@@ -20,7 +21,8 @@ import { UpdateCourseDialogComponent } from './update-course-dialog.coomponents'
         CommonModule,
         MatButtonModule,
         MatIconModule,
-        MatMenuModule
+        MatMenuModule,
+        RouterModule
     ]
     
 })

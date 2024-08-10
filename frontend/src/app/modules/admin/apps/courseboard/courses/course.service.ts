@@ -41,7 +41,9 @@ export class CourseService {
 
         );
     }
-
+    getCourseTasks(courseId: string): Observable<any[]> {
+        return this._httpClient.get<any[]>(`http://localhost:8888/api/Tasknote/tasks/course/${courseId}`);
+    }
     createCourse(course: Omit<Course, 'id'>): Observable<Course> {
         return this._httpClient.post<Course>('http://localhost:8888/api/Tasknote/courses', course).pipe(
             tap((newCourse) => {
