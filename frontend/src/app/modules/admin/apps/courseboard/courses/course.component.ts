@@ -3,13 +3,13 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector       : 'inventory',
-    templateUrl    : './inventory.component.html',
+    templateUrl    : './course.component.html',
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
     imports        : [RouterOutlet],
 })
-export class InventoryComponent
+export class CourseComponent
 {
     /**
      * Constructor

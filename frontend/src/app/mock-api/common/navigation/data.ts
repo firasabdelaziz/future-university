@@ -45,7 +45,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Course',
                 type : 'basic',
                 icon : 'heroicons_outline:academic-cap',
-                link : '/apps/courses',
+                link : '/apps/course',
             },
         ],
     },

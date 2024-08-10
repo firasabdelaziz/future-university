@@ -1,0 +1,43 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center font-medium">
+                <div>Courses</div>
+            </div>
+        </div>
+        <button
+            class="mt-3 sm:mt-0 sm:ml-2"
+            mat-flat-button
+            [color]="'primary'"
+            (click)="openAddCourseDialog()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+            <span class="ml-2 mr-1">Add Course</span>
+        </button>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="col-span-1" *ngFor="let course of courses">
+                <div class="flex flex-col p-6 bg-white shadow-lg rounded-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-xl font-semibold text-gray-900">{{course.name}}</div>
+                        <button
+                            mat-icon-button
+                            [matMenuTriggerFor]="courseMenu"
+                            aria-label="More options"
+                            class="text-gray-600 hover:text-gray-800">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #courseMenu="matMenu">
+                            <button mat-menu-item (click)="openDeleteConfirmationDialog(course)">Delete</button>
+                        </mat-menu>
+                    </div>
+                    <div class="text-gray-700">{{course.description}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

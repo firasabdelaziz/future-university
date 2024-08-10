@@ -84,8 +84,7 @@ export const appRoutes: Route[] = [
             {path: 'apps', children: [
                 {path: 'notes', loadChildren: () => import('app/modules/admin/apps/notes/notes.routes')},
                 {path: 'tasks', loadChildren: () => import('app/modules/admin/apps/tasks/tasks.routes')},
-                {path: 'courses', loadChildren: () => import('app/modules/admin/apps/ecommerce/ecommerce.routes')},
-
+                {path: 'course', loadChildren: () => import('app/modules/admin/apps/courseboard/course.routes')},
             ]},           
 
             // 404 & Catch all

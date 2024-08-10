@@ -21,7 +21,6 @@ export const appConfig: ApplicationConfig = {
             withPreloading(PreloadAllModules),
             withInMemoryScrolling({scrollPositionRestoration: 'enabled'}),
         ),
-
         // Material Date Adapter
         {
             provide : DateAdapter,
