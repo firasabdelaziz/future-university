@@ -9,11 +9,11 @@
                     <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
                         <img
                             class="w-full h-full object-cover"
-                            src="assets/images/avatars/brian-hughes.jpg">
+                            src="assets/images/avatars/male-18.jpg">
                     </div>
                     <div class="flex flex-col min-w-0 ml-4">
                         <ng-container *transloco="let t">
-                            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{t('welcome-back')}}, {{ username }}</div>
+                            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{t('welcome-back')}} {{ username }}</div>
                         </ng-container>
                         <div class="flex items-center">
                             <mat-icon
@@ -23,26 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Actions -->
-                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <button
-                        class="bg-accent"
-                        mat-flat-button
-                        [color]="'accent'">
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:envelope'"></mat-icon>
-                        <span class="ml-2">Messages</span>
-                    </button>
-                    <button
-                        mat-flat-button
-                        [color]="'primary'">
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:cog-8-tooth'"></mat-icon>
-                        <span class="ml-2">Settings</span>
-                    </button>
-                </div>
+                
             </div>
             <!-- Project selector -->
             <div
@@ -64,20 +45,9 @@
                     [xPosition]="'before'">
                     <button
                         mat-menu-item
-                        (click)="selectedProject='ACME Corp. Backend App'">ACME Corp. Backend App
+                        (click)="selectedProject='ACME Corp. Backend App'">LMS management
                     </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='ACME Corp. Frontend App'">ACME Corp. Frontend App
-                    </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='Creapond'">Creapond
-                    </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='Withinpixels'">Withinpixels
-                    </button>
+
                 </mat-menu>
             </div>
         </div>

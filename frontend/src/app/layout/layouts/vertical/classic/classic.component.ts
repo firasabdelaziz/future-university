@@ -30,6 +30,7 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy
     isScreenSmall: boolean;
     navigation: Navigation;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    backgroundColor: string;
 
     /**
      * Constructor
@@ -65,6 +66,9 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        const role = localStorage.getItem('role');
+        this.backgroundColor = role !== 'PROFESSOR' ? '#CDE8E5' : '#1a202c'; // Set your colors here
+
         // Subscribe to navigation data
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))

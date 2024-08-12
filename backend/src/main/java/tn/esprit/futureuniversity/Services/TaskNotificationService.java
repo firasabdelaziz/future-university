@@ -25,7 +25,7 @@ public class TaskNotificationService {
     }
 
     private void sendNotification(Task task) {
-        String destination = "/queue/notifications/" + task.getUserId().getId();
+        String destination = "/topic/notification" + task.getUserId().getId();
         String message = "Task '" + task.getTitle() + "' in course '" + task.getCourse().getName() + "' is due now!";
         messagingTemplate.convertAndSend(destination, message);
     }

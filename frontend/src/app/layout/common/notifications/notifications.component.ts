@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { Subject, takeUntil } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector       : 'notifications',
@@ -24,10 +25,11 @@ export class NotificationsComponent implements OnInit, OnDestroy
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
 
-    notifications: Notification[];
+    notifications: Notification[] = [];
     unreadCount: number = 0;
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    private subscription: Subscription;
 
     /**
      * Constructor
@@ -51,7 +53,7 @@ export class NotificationsComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
        // Subscribe to notification changes
-       this._notificationsService.notifications$
+       this.subscription = this._notificationsService.notifications$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((notifications: Notification[]) => {
            this.notifications = notifications;
@@ -77,6 +79,9 @@ export class NotificationsComponent implements OnInit, OnDestroy
         {
             this._overlayRef.dispose();
         }
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+          }
     }
 
     // -----------------------------------------------------------------------------------------------------

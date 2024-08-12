@@ -26,6 +26,7 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
                         "allowedCommonJsDependencies": [
+                            "@stomp/stompjs",
                             "apexcharts",
                             "highlight.js",
                             "crypto-js/enc-utf8",
@@ -96,7 +97,10 @@
                           "buildTarget": "fuse:build:development"
                         }
                     },
-                    "defaultConfiguration": "development"
+                    "defaultConfiguration": "development",
+                    "options": {
+                        "proxyConfig": "proxy.conf.json"
+                    }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",

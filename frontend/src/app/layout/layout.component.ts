@@ -59,6 +59,7 @@ export class LayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+    
         // Set the theme and scheme based on the configuration
         combineLatest([
             this._fuseConfigService.config$,

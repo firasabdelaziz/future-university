@@ -1,49 +1,47 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
-import { BehaviorSubject, map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
-//import * as Stomp from 'stompjs';
-//import * as SockJS from 'sockjs-client';
+import { BehaviorSubject, map, Observable, ReplaySubject, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { UserService as _authService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import {WebSocketService} from "./websocket.service";
+import { Client } from '@stomp/stompjs';
 
 @Injectable({providedIn: 'root'})
 export class NotificationsService
 {
-    private notificationsSubject = new BehaviorSubject<Notification[]>([]);
-   // private stompClient: Stomp.Client;
-    private baseUrl = 'http://localhost:8888/api'; // Your backend base URL
+   // private socket: WebSocket;
+   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
+   // private baseUrl = 'http://localhost:8000/api'; // Your backend base URL
+   // private _unsubscribeAll: Subject<any> = new Subject<any>();
+   // user: User;
+   public notifications = 0;
+   private stompClient: Client;
 
 
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
-    {
-       // this.initializeWebSocketConnection();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-/*
-    private initializeWebSocketConnection() {
-        const socket = new SockJS(`${this.baseUrl}/ws`);
-        this.stompClient = Stomp.over(socket);
-        this.stompClient.connect({}, (frame) => {
+    constructor(private _httpClient: HttpClient,private webSocketService: WebSocketService) {
+        
+        this.stompClient = this.webSocketService.connect();
+        
+        this.stompClient.onConnect = (frame) => {
             console.log('Connected: ' + frame);
-            
-            this.stompClient.subscribe('/topic/public', (message) => {
-              if (message.body) {
-                const notification: Notification = JSON.parse(message.body);
-                this.handleNewNotification(notification);    
-              }
+            this.stompClient.subscribe('/topic/notification', (message) => {
+                const body = JSON.parse(message.body);
+                console.log("my notification",message);
+                
+                this.notifications = body.count;
             });
-          }, (error) => {
-            console.error('WebSocket connection error:', error);
-          });
-      
-      }
-    
+        };
 
+        this.stompClient.activate();
+      }
+
+    
+     
+    
     /**
      * Getter for notifications
      */
@@ -52,10 +50,6 @@ export class NotificationsService
         return this.notificationsSubject.asObservable();
     }
 
-    private handleNewNotification(notification: Notification) {
-        const currentNotifications = this.notificationsSubject.value;
-        this.notificationsSubject.next([notification, ...currentNotifications]);
-      }
     
 
     // -----------------------------------------------------------------------------------------------------
