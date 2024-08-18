@@ -1,23 +1,53 @@
 package tn.esprit.futureuniversity.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import tn.esprit.futureuniversity.Entities.Notifications;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import tn.esprit.futureuniversity.Entities.Notification;
+import tn.esprit.futureuniversity.Services.NotificationService;
+import tn.esprit.futureuniversity.Services.TaskNotificationService;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("notifications")
 public class NotificationController {
+
     @Autowired
-    private SimpMessagingTemplate template;
-    // Initialize Notifications
-    private Notifications notifications = new Notifications(0);
-    @GetMapping("/notify")
-    public String getNotification() {
-        // Increment Notification by one
-        notifications.increment();
-        // Push notifications to front-end
-        template.convertAndSend("/topic/notification", notifications);
-        return "Notifications successfully sent to Angular !";
+    public NotificationService notificationService;
+
+
+    @GetMapping
+    public List<Notification> getAllNotifications() {
+        return notificationService.getAllNotifications();
     }
+
+    @PatchMapping("/mark-all-as-read")
+    public boolean markAllAsRead() {
+        return notificationService.markAllAsRead();
+    }
+
+    @GetMapping("/{id}")
+    public Notification getNotificationById(@PathVariable Long id) {
+        return notificationService.getNotificationById(id);
+    }
+
+    @PostMapping
+    public Notification createNotification(@RequestBody Notification notification) {
+        return notificationService.createNotification(notification);
+    }
+
+    @PutMapping("/{id}")
+    public Notification updateNotification(@PathVariable Long id, @RequestBody Notification notificationDetails) {
+        return notificationService.updateNotification(id, notificationDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteNotification(@PathVariable Long id) {
+        notificationService.deleteNotification(id);
+    }
+
+
 }

@@ -3,8 +3,7 @@
 
 <!-- Navigation -->
 <fuse-vertical-navigation
-[style.background-color]="backgroundColor"
-class="  print:hidden"
+    [class]="style"
     [mode]="isScreenSmall ? 'over' : 'side'"
     [name]="'mainNavigation'"
     [navigation]="navigation.default"
