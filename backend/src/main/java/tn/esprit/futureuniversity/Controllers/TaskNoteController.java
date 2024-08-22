@@ -50,6 +50,17 @@ public class TaskNoteController {
         return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bais));
     }
 
+    @GetMapping("/tasks/export/excel/course/{courseId}")
+    public ResponseEntity<InputStreamResource> exportTasksExcel(@PathVariable long courseId){
+        List<Task> tasks = taskNoteService.getTasksByCourse(courseId);
+        ByteArrayInputStream bais = exportService.tasksExcelReport(tasks);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=tasks.xlxs");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(bais));
+    }
+
+
+
 
     // Note endpoints
     @PostMapping("/notes")

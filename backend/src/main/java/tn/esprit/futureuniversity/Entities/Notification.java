@@ -39,7 +39,7 @@ public class Notification implements Serializable {
         this.title = title;
         this.description = message;
         this.link = link;
-        this.isRead = false;
+        this.isRead = false ;
         this.time = LocalDateTime.now();
     }
 
