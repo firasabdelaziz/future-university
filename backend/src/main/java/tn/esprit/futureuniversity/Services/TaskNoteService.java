@@ -4,6 +4,7 @@ import tn.esprit.futureuniversity.Entities.Course;
 import tn.esprit.futureuniversity.Entities.Note;
 import tn.esprit.futureuniversity.Entities.Task;
 import tn.esprit.futureuniversity.Entities.User;
+import tn.esprit.futureuniversity.Enums.Role;
 import tn.esprit.futureuniversity.Repositories.CourseRepository;
 import tn.esprit.futureuniversity.Repositories.NoteRepository;
 import tn.esprit.futureuniversity.Repositories.TaskRepository;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.futureuniversity.Repositories.UserRepository;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class TaskNoteService implements ITaskNoteService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final TaskNotificationService notificationService;
+    private final EmailService emailService;
 
 
 
@@ -135,9 +138,22 @@ public class TaskNoteService implements ITaskNoteService {
 
     @Override
     public Course createCourse(Course course) {
-        return courseRepository.save(course);
+        Course savedCourse = courseRepository.save(course);
+        sendCourseCreationEmailToAllStudents(savedCourse);
+        return savedCourse;
     }
 
+    private void sendCourseCreationEmailToAllStudents(Course course) {
+        List<User> students = userRepository.findByRole(Role.STUDENT);
+        System.out.println("list of students"+students);
+        for (User student : students) {
+            try {
+                emailService.sendCourseCreationEmail(student.getEmail(), course);
+            } catch (MessagingException e) {
+                log.error("Failed to send course creation email to student: " + student.getEmail(), e);
+            }
+        }
+    }
     @Override
     public Course getCourseById(long id) {
         return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
