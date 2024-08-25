@@ -9,7 +9,7 @@ Welcome to the University of the Future project repository! This project aims to
 1. **Clone the Repository**
 
    ```
-   git clone git@github.com:NacerKH/future-university.git
+   git clone git@github.com:firasabdelaziz/future-university.git
    ```
 2. **Backend Setup**:
 

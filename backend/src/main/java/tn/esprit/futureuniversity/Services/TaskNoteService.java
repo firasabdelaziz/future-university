@@ -169,7 +169,19 @@ public class TaskNoteService implements ITaskNoteService {
 
     @Override
     public void deleteCourseById(long id) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        // Retrieve the list of tasks with the specified courseId
+        List<Task> tasks = taskRepository.findByCourseId(course.getId());
+
+        // Delete all tasks in the list
+        taskRepository.deleteAll(tasks);
+
+        // Now delete the course
         courseRepository.deleteById(id);
+
     }
 
 }
