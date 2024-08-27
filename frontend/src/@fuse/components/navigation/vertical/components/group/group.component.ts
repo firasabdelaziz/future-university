@@ -52,7 +52,8 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     {
         // Get the parent navigation component
         this._fuseVerticalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
-
+        console.log("this",localStorage.getItem('role'));
+        
         // Subscribe to onRefreshed on the navigation component
         this._fuseVerticalNavigationComponent.onRefreshed.pipe(
             takeUntil(this._unsubscribeAll),
