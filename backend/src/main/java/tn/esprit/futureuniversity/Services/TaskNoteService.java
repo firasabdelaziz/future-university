@@ -82,7 +82,7 @@ public class TaskNoteService implements ITaskNoteService {
     @Override
     public Task createTask(Task task) {
         Task savedTask = taskRepository.save(task);
-        notificationService.scheduleNotification(savedTask);
+        notificationService.scheduleNotificationCreationTask(savedTask);
         return savedTask;
     }
 

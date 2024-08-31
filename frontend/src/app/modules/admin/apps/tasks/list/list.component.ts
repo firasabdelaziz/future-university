@@ -88,7 +88,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
       id: localStorage.getItem('userId'),
     },
     course: {
-      id: 1,
+      id: 13,
     },
     tags: ["tag1", "tag2"],
     completed: false,

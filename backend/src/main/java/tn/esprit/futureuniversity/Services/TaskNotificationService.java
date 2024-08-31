@@ -45,6 +45,12 @@ public class TaskNotificationService {
 
     }
 
+    public void scheduleNotificationCreationTask(Task task) {
+
+            sendNotification(task, "Task craeted: " + task.getTitle());
+
+    }
+
     private void sendNotification(Task task,String message) {
         String destination = "/topic/notification";
 
