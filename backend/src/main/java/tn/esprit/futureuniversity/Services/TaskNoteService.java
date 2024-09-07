@@ -1,5 +1,6 @@
 package tn.esprit.futureuniversity.Services;
 
+import org.springframework.scheduling.annotation.Async;
 import tn.esprit.futureuniversity.Entities.Course;
 import tn.esprit.futureuniversity.Entities.Note;
 import tn.esprit.futureuniversity.Entities.Task;
@@ -147,11 +148,16 @@ public class TaskNoteService implements ITaskNoteService {
         List<User> students = userRepository.findByRole(Role.STUDENT);
         System.out.println("list of students"+students);
         for (User student : students) {
-            try {
-                emailService.sendCourseCreationEmail(student.getEmail(), course);
-            } catch (MessagingException e) {
-                log.error("Failed to send course creation email to student: " + student.getEmail(), e);
-            }
+            sendEmailAsync(student, course);
+        }
+    }
+
+    @Async
+    public void sendEmailAsync(User student, Course course) {
+        try {
+            emailService.sendCourseCreationEmail(student.getEmail(), course);
+        } catch (MessagingException e) {
+            log.error("Failed to send course creation email to student: " + student.getEmail(), e);
         }
     }
     @Override
