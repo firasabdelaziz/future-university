@@ -83,7 +83,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     title: "Placeholder",
     description: "Placeholder description",
     priority: "HIGH",
-    dueDate: "2024-06-15T00:00:00.000Z",
+    dueDate: "2025-06-15T00:00:00.000Z",
     userId: {
       id: localStorage.getItem('userId'),
     },

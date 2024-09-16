@@ -21,6 +21,7 @@ import { NotificationPopupComponent } from "./notification-popup.components";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { ComponentPortal } from "@angular/cdk/portal";
 import { environment } from "../../../../../environments/environment";
+import { TaskCompletionPopupComponent } from "./task-completion-popup.components";
 
 @Injectable({ providedIn: "root" })
 export class NotificationsService {
@@ -77,8 +78,19 @@ export class NotificationsService {
         .right("20px"),
       hasBackdrop: false,
     });
+    const isTaskCompletion = notification.description.includes("Congratulations");
 
-    const notificationRef: ComponentRef<NotificationPopupComponent> =
+    if(isTaskCompletion){
+      const notificationRef: ComponentRef<TaskCompletionPopupComponent> =
+      overlayRef.attach(
+        new ComponentPortal(
+          TaskCompletionPopupComponent,
+          null,
+          this.createInjector(notification, overlayRef)
+        )
+      );
+    }else {
+      const notificationRef: ComponentRef<NotificationPopupComponent> =
       overlayRef.attach(
         new ComponentPortal(
           NotificationPopupComponent,
@@ -86,6 +98,8 @@ export class NotificationsService {
           this.createInjector(notification, overlayRef)
         )
       );
+    }
+   
 
     setTimeout(() => {
       overlayRef.dispose();
