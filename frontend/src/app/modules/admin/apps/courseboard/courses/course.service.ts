@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Course, CoursePagination } from './course.types';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap,of, delay, switchMap } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class CourseService {
     private _courses: BehaviorSubject<Course[]> = new BehaviorSubject<Course[]>([]);
     private _course: BehaviorSubject<Course | null> = new BehaviorSubject<Course | null>(null);
     private _pagination: BehaviorSubject<CoursePagination | null> = new BehaviorSubject(null);
+    private _courseCreationStatus: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     constructor(private _httpClient: HttpClient) {}
 
@@ -45,12 +46,32 @@ export class CourseService {
         return this._httpClient.get<any[]>(`http://localhost:8888/api/Tasknote/tasks/course/${courseId}`);
     }
     createCourse(course: Omit<Course, 'id'>): Observable<Course> {
+        this._courseCreationStatus.next('Creating course and sending emails to students...');
+        
         return this._httpClient.post<Course>('http://localhost:8888/api/Tasknote/courses', course).pipe(
-            tap((newCourse) => {
-                const currentCourses = this._courses.value;
-                this._courses.next([...currentCourses, newCourse]);
+            switchMap((newCourse) => {
+                return this.simulateEmailSending().pipe(
+                    tap(() => {
+                        const currentCourses = this._courses.value;
+                        this._courses.next([...currentCourses, newCourse]);
+                        this._courseCreationStatus.next('Course created and emails sent successfully!');
+                    }),
+                    delay(1000), // Add a small delay before resetting the status
+                    tap(() => {
+                        this._courseCreationStatus.next('');
+                    }),
+                    switchMap(() => of(newCourse))
+                );
             })
         );
+    }
+
+    private simulateEmailSending(): Observable<boolean> {
+        return of(true).pipe(delay(3000)); // Simulate a 3-second delay for email sending
+    }
+
+    get courseCreationStatus$(): Observable<string> {
+        return this._courseCreationStatus.asObservable();
     }
 
     updateCourse(id: string, course: Partial<Course>): Observable<Course> {

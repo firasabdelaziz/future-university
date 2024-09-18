@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { UpdateCourseDialogComponent } from './update-course-dialog.coomponents';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
     selector     : 'course-list',
@@ -22,12 +23,14 @@ import { RouterModule } from '@angular/router';
         MatButtonModule,
         MatIconModule,
         MatMenuModule,
-        RouterModule
+        RouterModule,
+        MatProgressSpinnerModule
     ]
     
 })
 export class CourseListComponent implements OnInit {
     courses: Course[];
+    courseCreationStatus: string = '';
     private _subscriptions: Subscription = new Subscription();
 
     constructor(
@@ -42,6 +45,12 @@ export class CourseListComponent implements OnInit {
             this._courseService.courses$.subscribe((courses) => {
                 this.courses = courses;
                 this._cdr.detectChanges(); // Ensure changes are detected
+            })
+        );
+        this._subscriptions.add(
+            this._courseService.courseCreationStatus$.subscribe((status) => {
+                this.courseCreationStatus = status;
+                this._cdr.detectChanges();
             })
         );
         this._courseService.getCourses().subscribe(); // Ensure initial data load

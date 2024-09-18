@@ -66,8 +66,13 @@ public class TaskNotificationService {
     }
 
     public void scheduleNotificationCreationTask(Task task) {
+        String userName = task.getUserId().getFirstName() + " " + task.getUserId().getLastName(); // Assuming there's a User object associated with the task
+        String courseName = task.getCourse().getName();
 
-            sendNotification(task, "Task craeted: " + task.getTitle());
+        String message = String.format("Task craeted by %s! in the course '%s'.",
+                userName, courseName);
+
+        sendNotification(task, message);
 
     }
 
