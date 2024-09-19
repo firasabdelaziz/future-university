@@ -53,7 +53,6 @@
 - **Frontend:** [Angular](https://angular.io/)
 - **Database:** [MySQL](https://www.mysql.com/)
 - **Containerization:** [Docker](https://www.docker.com/)
-- **CI/CD:** [Jenkins](https://www.jenkins.io/)
 - **Real-Time Communication:** [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 
 ## Installation
